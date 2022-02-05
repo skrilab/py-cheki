@@ -39,6 +39,7 @@ def get_data():
 
 
     # Nosaka ceka paraugu un izgust vajadzigos datus;
+# Virsi
     if veikals_PVN == virsiDus:
         print("Found Virši-A DUS!")
     
@@ -62,24 +63,25 @@ def get_data():
             print(virsiDus_datums)
         veikals_DATUMS = virsiDus_datums
 
-
+# Mego...
     elif veikals_PVN == megoVeikals:
         print("Found Mego veikals!")
 
-        megoVeikals_kase = re.findall(r"Nr.(\d.R\d+)", data)[0]
+        megoVeikals_kase = re.findall(r"numurs: (SP-LV\d+)", data)[0]
         print(megoVeikals_kase)
         veikals_KASE = megoVeikals_kase
     
-        megoVeikals_ceks = re.findall(r"eks.(\d./\d+)", data)[0]
+        megoVeikals_ceks = re.findall(r"(\d\d\d/\d+)", data)[0]
         print(megoVeikals_ceks)
         veikals_CEKS = megoVeikals_ceks
 
-        megoVeikals_summa = re.findall(r"(\d+,\d+).EUR", data)[0]
+        #megoVeikals_summa = re.findall(r"(\d+.\d+).EUR", data)[0]
+        megoVeikals_summa = re.findall(r"[SUMMA:\n|SUMMA:\n\n](\d.\d\d).EUR", data)[0]
         print(megoVeikals_summa)    
         veikals_SUMMA = megoVeikals_summa
 
-        megoVeikals_datums = re.findall(r"(\d\d.\d\d.\d\d\d\d).\d.:\d.:\d.", data)[0]
-        #print(virsiDus_datums)
+        megoVeikals_datums = re.findall(r"Datums:.(\d\d.\d\d.\d\d\d\d)", data)[0]
+        #print( megoVeikals_datums)
         veikals_Orig_DATUMS = megoVeikals_datums
         if megoVeikals_datums[0] == "0":
             megoVeikals_datums = megoVeikals_datums.replace('0', '')[0]
@@ -162,10 +164,8 @@ def fill_form():
     time.sleep(5)
 
     # iesniedzam formu;
-    #btn_FIN = driver.find_element_by_xpath('//*[@id="modal"]/div/div/div[2]/div[1]/button')
-    #btn_FIN.click()
+ #   btn_FIN = driver.find_element_by_xpath('//*[@id="modal"]/div/div/div[2]/div[1]/button')
+ #   btn_FIN.click()
     #time.sleep(1)
 
     #driver.quit()
-
-
