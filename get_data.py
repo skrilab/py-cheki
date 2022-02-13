@@ -15,15 +15,12 @@ class MbConstants:
 PATH = "C:\chromedriver_win32\chromedriver.exe"
 
 
-# Izveidot jaunu failu (parrasktit esosu) un ierakstit clipboard saturu;
-#f = open("outfile-temp.txt", "w", encoding="utf-8")
-#f.write(data)
-#f.close()
-
-
 # Definejam zinamo veikalu PVN reg. NR. (pec siem tiek noteikts ceka paraugs);
-virsiDus = "40003242733"       #Degviela Virši-A DUS
-megoVeikals = "40003642393"           #Rimi veikals
+virsiDus = "40003242733"        #Degviela Virši-A DUS
+megoVeikals = "40003642393"     #Rimi veikals
+#menessAptieka = "55403012521"   #Meness aptieka
+maximaVeikals = "40003520643"   #Maxima veikals
+
 
 # Funkcija lai izgutu nepieciesamos datus no clipboard satura;
 def get_data():
@@ -44,7 +41,7 @@ def get_data():
 
 
     # Nosaka ceka paraugu un izgust vajadzigos datus;
-# Virsi
+# Virsi...
     if veikals_PVN == virsiDus:
         print("Found Virši-A DUS!")
     
@@ -98,8 +95,35 @@ def get_data():
             print(megoVeikals_datums)
             veikals_DATUMS = megoVeikals_datums
 
+# Maxima...
+    elif veikals_PVN == maximaVeikals:
+        print("Found Maxima veikals!")
+    
+        maximaVeikals_kase = re.findall(r"Nr.(\d.R\d+)", data)[0]
+        print(maximaVeikals_kase)
+        veikals_KASE = maximaVeikals_kase
+    
+        maximaVeikals_ceks = re.findall(r"eks.(\d./\d+)", data)[0]
+        print(maximaVeikals_ceks)
+        veikals_CEKS = maximaVeikals_ceks
+
+        maximaVeikals_summa = re.findall(r"(\d+,\d+).EUR", data)[0]
+        print(maximaVeikals_summa)    
+        veikals_SUMMA = maximaVeikals_summa
+
+        maximaVeikals_datums = re.findall(r"(\d+-\d+-\d+).\d.:\d.:\d.", data)[0]
+        veikals_Orig_DATUMS = maximaVeikals_datums
+        if maximaVeikals_datums[8] == "0":
+            maximaVeikals_datums = maximaVeikals_datums.replace('0', '')[6]
+            print(maximaVeikals_datums)
+            veikals_DATUMS = maximaVeikals_datums
+        else:
+            maximaVeikals_datums = maximaVeikals_datums[8:]
+            print(maximaVeikals_datums)
+            veikals_DATUMS = maximaVeikals_datums
+
     else:
-        print("Not found!")
+        print("Netika atrasts PVN maksātāja numurs!")
 
 
 # Fukncija lai izveidotu jaunu failu un ierakstitu izguto datu (caur regex) saturu;
