@@ -6,6 +6,11 @@ from xml.dom.minidom import Element
 from selenium import webdriver
 import time
 import os.path
+import ctypes
+class MbConstants:
+    MB_OKCANCEL = 1
+    IDCANCEL = 2
+    IDOK = 1
 
 PATH = "C:\chromedriver_win32\chromedriver.exe"
 
@@ -71,12 +76,13 @@ def get_data():
         print(megoVeikals_kase)
         veikals_KASE = megoVeikals_kase
     
-        megoVeikals_ceks = re.findall(r"(\d\d\d/\d+)", data)[0]
+        #megoVeikals_ceks = re.findall(r"(\d\d\d/\d+)", data)[0]
+        megoVeikals_ceks = re.findall(r"(\d+/\d+).Kase", data)[0]     # 12.02.2022 labots regex
         print(megoVeikals_ceks)
         veikals_CEKS = megoVeikals_ceks
 
         #megoVeikals_summa = re.findall(r"(\d+.\d+).EUR", data)[0]
-        megoVeikals_summa = re.findall(r"[SUMMA:\n|SUMMA:\n\n](\d.\d\d).EUR", data)[0]
+        megoVeikals_summa = re.findall(r"[SUMMA:\n|SUMMA:\n\n](\d+.\d\d).EUR", data)[0]
         print(megoVeikals_summa)    
         veikals_SUMMA = megoVeikals_summa
 
@@ -86,8 +92,12 @@ def get_data():
         if megoVeikals_datums[0] == "0":
             megoVeikals_datums = megoVeikals_datums.replace('0', '')[0]
             print(megoVeikals_datums)
-        veikals_DATUMS = megoVeikals_datums
-    
+            veikals_DATUMS = megoVeikals_datums
+        else:
+            megoVeikals_datums = megoVeikals_datums[:2]
+            print(megoVeikals_datums)
+            veikals_DATUMS = megoVeikals_datums
+
     else:
         print("Not found!")
 
@@ -107,6 +117,10 @@ def write_file():
     f.write(veikals_Orig_DATUMS + '\n')
     f.close()
 
+# Funkcija lai uzraditu pop-up logu datu salidzinasanai un iesniegsanai vai atsauksanai;
+def message_window(message, title):
+    return ctypes.windll.user32.MessageBoxW(0,message, title, MbConstants.MB_OKCANCEL)
+    
 
 # Funkcija lai automatiski aizpilditu formu ar iegutajiem datiem;
 def fill_form():
@@ -161,11 +175,25 @@ def fill_form():
     # ievadam tel. nr.;
     input_TEL = driver.find_element_by_name('phone')
     input_TEL.send_keys("29991579")
-    time.sleep(5)
-
-    # iesniedzam formu;
- #   btn_FIN = driver.find_element_by_xpath('//*[@id="modal"]/div/div/div[2]/div[1]/button')
- #   btn_FIN.click()
-    #time.sleep(1)
-
-    #driver.quit()
+    user_input = message_window(veikals_KASE + '\n' + veikals_CEKS + '\n' + veikals_SUMMA + '\n' + veikals_Orig_DATUMS + '\n',"Datu salīdzināšana")
+    if  user_input == MbConstants.IDOK:
+        print("ok pressed")
+# iesniedzam formu;
+        btn_FIN = driver.find_element_by_xpath('//*[@id="modal"]/div/div/div[2]/div[1]/button')
+        btn_FIN.click()
+        time.sleep(1)    
+# izvelamies e-pasta apstiprinajumu par dalibu;
+        btn_MAIL = driver.find_element_by_xpath('//*[@id="modal"]/div/div/div[4]/div[2]/button[2]')
+        btn_MAIL.click()
+        time.sleep(0.5)
+# aizpildam e-pasta formu;
+        input_MAIL = driver.find_element_by_name('email')
+        input_MAIL.send_keys("juris.skribis@gmail.com")
+        time.sleep(1)
+        btn_SENDMAIL = driver.find_element_by_xpath('//*[@id="modal"]/div/div/div[4]/div[2]/div/div/button')
+        btn_SENDMAIL.click()
+        time.sleep(5)    
+        driver.quit()
+    elif user_input == MbConstants.IDCANCEL:
+        print("cancel presssed")
+        driver.quit()
