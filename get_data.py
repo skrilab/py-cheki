@@ -18,14 +18,14 @@ PATH = "C:\chromedriver_win32\chromedriver.exe"
 # Definejam zinamo veikalu PVN reg. NR. (pec siem tiek noteikts ceka paraugs);
 virsiDus = "40003242733"        #Degviela Virši-A DUS
 megoVeikals = "40003642393"     #Rimi veikals
-#menessAptieka = "55403012521"   #Meness aptieka
+menessAptieka = "55403012521"   #Meness aptieka
 maximaVeikals = "40003520643"   #Maxima veikals
 
 
 # Funkcija lai izgutu nepieciesamos datus no clipboard satura;
 def get_data():
-    #clipboard.copy("abc")  # now the clipboard content will be string "abc"
-    data = clipboard.paste()  # text will have the content of clipboard
+    #Definejam clipboard saturu;    
+    data = clipboard.paste()
     
     global veikals_PVN
     global veikals_KASE
@@ -34,14 +34,17 @@ def get_data():
     global veikals_DATUMS
     global veikals_Orig_DATUMS
 
-    # Clipboad datos samekle PVN numuru;
-    #veikals_PVN = re.findall(r"kods LV(\d+)", data)[0]
-    veikals_PVN = re.findall(r"(4000\d\d\d\d\d\d\d)", data)[0]
+    # Clipboad datos samekle PVN numuru. Pagaidam caur error handling funkciju;
+    try:
+        veikals_PVN = re.findall(r"(4000\d\d\d\d\d\d\d)", data)[0] # Visi
+    except:
+        veikals_PVN = re.findall(r"LV(55\d\d\d\d\d\d\d\d\d)", data)[0] # Meness aptieka
+
     print(veikals_PVN)
 
 
     # Nosaka ceka paraugu un izgust vajadzigos datus;
-# Virsi...
+    # Virsi...
     if veikals_PVN == virsiDus:
         print("Found Virši-A DUS!")
     
@@ -65,7 +68,7 @@ def get_data():
             print(virsiDus_datums)
         veikals_DATUMS = virsiDus_datums
 
-# Mego...
+    # Mego...
     elif veikals_PVN == megoVeikals:
         print("Found Mego veikals!")
 
@@ -95,7 +98,7 @@ def get_data():
             print(megoVeikals_datums)
             veikals_DATUMS = megoVeikals_datums
 
-# Maxima...
+    # Maxima...
     elif veikals_PVN == maximaVeikals:
         print("Found Maxima veikals!")
     
@@ -122,9 +125,32 @@ def get_data():
             print(maximaVeikals_datums)
             veikals_DATUMS = maximaVeikals_datums
 
-    else:
-        print("Netika atrasts PVN maksātāja numurs!")
+    # Meness aptieka...
+    if veikals_PVN == menessAptieka:
+        print("Found Mēness aptieka!")
+    
+        menessAptieka_kase = re.findall(r"[SAS. NR:\n+](75000\d\d\d)", data)[0]
+        print(menessAptieka_kase)
+        veikals_KASE = menessAptieka_kase
+    
+        menessAptieka_ceks = re.findall(r"DOK.+NR: (\d+)", data)[0]
+        print(menessAptieka_ceks)
+        veikals_CEKS = menessAptieka_ceks
 
+        menessAptieka_summa = re.findall(r"[KOPA\n+](\d+,\d+).EUR", data)[0]
+        print(menessAptieka_summa)    
+        veikals_SUMMA = menessAptieka_summa
+
+        menessAptieka_datums = re.findall(r"(\d+-\d+-\d+).\d.:\d.", data)[0]
+        veikals_Orig_DATUMS = menessAptieka_datums
+        if menessAptieka_datums[8] == "0":
+            menessAptieka_datums = menessAptieka_datums.replace('0', '')[6]
+            print(menessAptieka_datums)
+            veikals_DATUMS = menessAptieka_datums
+        else:
+            menessAptieka_datums = menessAptieka_datums[8:]
+            print(menessAptieka_datums)
+            veikals_DATUMS = menessAptieka_datums
 
 # Fukncija lai izveidotu jaunu failu un ierakstitu izguto datu (caur regex) saturu;
 def write_file():
@@ -144,7 +170,6 @@ def write_file():
 # Funkcija lai uzraditu pop-up logu datu salidzinasanai un iesniegsanai vai atsauksanai;
 def message_window(message, title):
     return ctypes.windll.user32.MessageBoxW(0,message, title, MbConstants.MB_OKCANCEL)
-    
 
 # Funkcija lai automatiski aizpilditu formu ar iegutajiem datiem;
 def fill_form():

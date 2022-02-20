@@ -25,7 +25,7 @@ class Clipboard:
     def _process_message(self, hwnd: int, msg: int, wparam: int, lparam: int):
         WM_CLIPBOARDUPDATE = 0x031D
         if msg == WM_CLIPBOARDUPDATE:
-            print('clipboard updated!')
+            print('Clipboard saturs ir jaunināts!')
             get_data.get_data()
             get_data.write_file()
             get_data.fill_form()
