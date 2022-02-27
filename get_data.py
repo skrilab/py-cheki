@@ -16,10 +16,12 @@ PATH = "C:\chromedriver_win32\chromedriver.exe"
 
 
 # Definejam zinamo veikalu PVN reg. NR. (pec siem tiek noteikts ceka paraugs);
-virsiDus = "40003242733"        #Degviela Virši-A DUS
-megoVeikals = "40003642393"     #Rimi veikals
-menessAptieka = "55403012521"   #Meness aptieka
-maximaVeikals = "40003520643"   #Maxima veikals
+virsiDus = "40003242733"        # Degviela Virši-A DUS
+megoVeikals = "40003642393"     # Rimi veikals
+menessAptieka = "55403012521"   # Meness aptieka
+maximaVeikals = "40003520643"   # Maxima veikals
+apotheka_aptieka = "40003723815" # Apotheka aptieka
+
 
 
 # Funkcija lai izgutu nepieciesamos datus no clipboard satura;
@@ -151,6 +153,36 @@ def get_data():
             menessAptieka_datums = menessAptieka_datums[8:]
             print(menessAptieka_datums)
             veikals_DATUMS = menessAptieka_datums
+
+   # Apotheka aptieka...
+    elif veikals_PVN == apotheka_aptieka:
+        print("Found Apotheka aptieka!")
+
+        apotheka_aptieka_kase = re.findall(r"numurs: (AI\d+|Al\d+)", data)[0]
+        if apotheka_aptieka_kase.startswith("Al") == True:
+            apotheka_aptieka_kase = apotheka_aptieka_kase.replace("Al", "AI")
+        print(apotheka_aptieka_kase)
+        veikals_KASE = apotheka_aptieka_kase
+    
+        apotheka_aptieka_ceks = re.findall(r"(\d+/\d+).Kase", data)[0]
+        print(apotheka_aptieka_ceks)
+        veikals_CEKS = apotheka_aptieka_ceks
+
+        apotheka_aptieka_summa = re.findall(r'Samaksai EUR\r\n\r\n(\d+.\d\d)', data)[0]
+        print(apotheka_aptieka_summa)    
+        veikals_SUMMA = apotheka_aptieka_summa
+
+        apotheka_aptieka_datums = re.findall(r"(\d+-\d+-\d+).\d.:\d.", data)[0]
+        veikals_Orig_DATUMS = apotheka_aptieka_datums
+        if apotheka_aptieka_datums[8] == "0":
+            apotheka_aptieka_datums = apotheka_aptieka_datums.replace('0', '')[6]
+            print(apotheka_aptieka_datums)
+            veikals_DATUMS = apotheka_aptieka_datums
+        else:
+            apotheka_aptieka_datums = apotheka_aptieka_datums[8:]
+            print(apotheka_aptieka_datums)
+            veikals_DATUMS = apotheka_aptieka_datums
+
 
 # Fukncija lai izveidotu jaunu failu un ierakstitu izguto datu (caur regex) saturu;
 def write_file():
