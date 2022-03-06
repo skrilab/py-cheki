@@ -183,9 +183,19 @@ def get_data():
             print(apotheka_aptieka_datums)
             veikals_DATUMS = apotheka_aptieka_datums
 
+# Fukncija lai izveidotu jaunu pagaidu clipboard datu uzglabasanas failu talakai datu apstradei;
+def write_tempfile():
+    cwd = os.getcwd()
+    timestr = time.strftime("%d%m%Y-%H%M%S")
+    targetPath = os.path.join(cwd + '\temp')
+    targetFile = os.path.join(targetPath, timestr + ".txt")
+    f = open(targetFile, "w", encoding="utf-8")
+    f.write(clipboard.paste)
+    f.close()
 
-# Fukncija lai izveidotu jaunu failu un ierakstitu izguto datu (caur regex) saturu;
-def write_file():
+
+# Fukncija lai izveidotu jaunu log failu un ierakstitu izguto datu (caur regex) saturu;
+def write_logfile():
     cwd = os.getcwd()
     timestr = time.strftime("%d%m%Y-%H%M%S")
     targetPath = os.path.join(cwd + '\logs')
