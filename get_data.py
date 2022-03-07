@@ -23,7 +23,6 @@ maximaVeikals = "40003520643"   # Maxima veikals
 apotheka_aptieka = "40003723815" # Apotheka aptieka
 
 
-
 # Funkcija lai izgutu nepieciesamos datus no clipboard satura;
 def get_data():
     #Definejam clipboard saturu;    
@@ -185,12 +184,14 @@ def get_data():
 
 # Fukncija lai izveidotu jaunu pagaidu clipboard datu uzglabasanas failu talakai datu apstradei;
 def write_tempfile():
+    dati = clipboard.paste()
     cwd = os.getcwd()
     timestr = time.strftime("%d%m%Y-%H%M%S")
     targetPath = os.path.join(cwd + '\temp')
-    targetFile = os.path.join(targetPath, timestr + ".txt")
+    #targetFile = os.path.join(targetPath, timestr + ".txt")
+    targetFile = os.path.join(cwd, timestr + ".txt")
     f = open(targetFile, "w", encoding="utf-8")
-    f.write(clipboard.paste)
+    f.write(dati)
     f.close()
 
 
