@@ -17,7 +17,7 @@ PATH = "C:\chromedriver_win32\chromedriver.exe"
 
 # Definejam zinamo veikalu PVN reg. NR. (pec siem tiek noteikts ceka paraugs);
 virsiDus = "40003242733"        # Degviela Virši-A DUS
-megoVeikals = "40003642393"     # Rimi veikals
+megoVeikals = "40003642393"     # Mego veikals
 menessAptieka = "55403012521"   # Meness aptieka
 maximaVeikals = "40003520643"   # Maxima veikals
 apotheka_aptieka = "40003723815" # Apotheka aptieka
@@ -187,11 +187,17 @@ def write_tempfile():
     dati = clipboard.paste()
     cwd = os.getcwd()
     timestr = time.strftime("%d%m%Y-%H%M%S")
-    targetPath = os.path.join(cwd + '\temp')
-    #targetFile = os.path.join(targetPath, timestr + ".txt")
     targetFile = os.path.join(cwd, timestr + ".txt")
     f = open(targetFile, "w", encoding="utf-8")
-    f.write(dati)
+    
+    without_line_breaks = dati.replace("\r", "!")
+   
+    no_lbreaks = ""
+    for line in without_line_breaks:
+        strip_line = line.rstrip("\r\n")
+        no_lbreaks += strip_line
+        
+    f.write(no_lbreaks.replace("!!", " "))
     f.close()
 
 
