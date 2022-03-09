@@ -1,5 +1,4 @@
 import clipboard
-#import linecache
 import re
 from lib2to3.pgen2 import driver
 from xml.dom.minidom import Element
@@ -182,23 +181,30 @@ def get_data():
             print(apotheka_aptieka_datums)
             veikals_DATUMS = apotheka_aptieka_datums
 
+
 # Fukncija lai izveidotu jaunu pagaidu clipboard datu uzglabasanas failu talakai datu apstradei;
 def write_tempfile():
     dati = clipboard.paste()
     cwd = os.getcwd()
     timestr = time.strftime("%d%m%Y-%H%M%S")
+    global targetFile
     targetFile = os.path.join(cwd, timestr + ".txt")
-    f = open(targetFile, "w", encoding="utf-8")
+    temp_file = open(targetFile, "w", encoding="utf-8")
     
-    without_line_breaks = dati.replace("\r", "!")
+    temp_line = dati.replace("\r", "!")
    
     no_lbreaks = ""
-    for line in without_line_breaks:
+    for line in temp_line:
         strip_line = line.rstrip("\r\n")
         no_lbreaks += strip_line
         
-    f.write(no_lbreaks.replace("!!", " "))
-    f.close()
+    temp_file.write(no_lbreaks.replace("!!", " "))
+    temp_file.close()
+
+
+# Funkcija pagaidu datu faila dzesanai
+def del_tempfile():
+    os.remove(targetFile)
 
 
 # Fukncija lai izveidotu jaunu log failu un ierakstitu izguto datu (caur regex) saturu;
@@ -216,9 +222,11 @@ def write_logfile():
     f.write(veikals_Orig_DATUMS + '\n')
     f.close()
 
+
 # Funkcija lai uzraditu pop-up logu datu salidzinasanai un iesniegsanai vai atsauksanai;
 def message_window(message, title):
     return ctypes.windll.user32.MessageBoxW(0,message, title, MbConstants.MB_OKCANCEL)
+
 
 # Funkcija lai automatiski aizpilditu formu ar iegutajiem datiem;
 def fill_form():
