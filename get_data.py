@@ -6,6 +6,8 @@ from selenium import webdriver
 import time
 import os.path
 import ctypes
+import mani_dati
+
 class MbConstants:
     MB_OKCANCEL = 1
     IDCANCEL = 2
@@ -15,11 +17,15 @@ PATH = "C:\chromedriver_win32\chromedriver.exe"
 
 
 # Definejam zinamo veikalu PVN reg. NR. (pec siem tiek noteikts ceka paraugs);
-virsiDus = "40003242733"        # Degviela Virši-A DUS
-megoVeikals = "40003642393"     # Mego veikals
-menessAptieka = "55403012521"   # Meness aptieka
-maximaVeikals = "40003520643"   # Maxima veikals
-apotheka_aptieka = "40003723815" # Apotheka aptieka
+paraugs_2 = ["40003642393","40003723815"]   # 2. paraugs | Mego veikals, Apotheka aptieka
+paraugs_3 = ["40003242733","40003520643"]   # 3. paraugs | Virši-A DUS, Maxima veikals
+paraugs_8 = ["55403012521"]   # 8. paraugs | Meness aptieka
+
+#virsiDus = "40003242733"        # 3. paraugs | Virši-A DUS
+#megoVeikals = "40003642393"     # 2. paraugs | Mego veikals
+menessAptieka = "55403012521"   # 8. paraugs | Meness aptieka
+#maximaVeikals = "40003520643"   # 3. paraugs | Maxima veikals
+#apotheka_aptieka = "40003723815" # 2. paraugs | Apotheka aptieka
 
 
 # Funkcija lai izgutu nepieciesamos datus no clipboard satura;
@@ -280,7 +286,7 @@ def fill_form():
 
     # ievadam tel. nr.;
     input_TEL = driver.find_element_by_name('phone')
-    input_TEL.send_keys("29991579")
+    input_TEL.send_keys(mani_dati.telefons)
     user_input = message_window(veikals_KASE + '\n' + veikals_CEKS + '\n' + veikals_SUMMA + '\n' + veikals_Orig_DATUMS + '\n',"Datu salīdzināšana")
     if  user_input == MbConstants.IDOK:
         print("ok pressed")
@@ -294,7 +300,7 @@ def fill_form():
         time.sleep(0.5)
 # aizpildam e-pasta formu;
         input_MAIL = driver.find_element_by_name('email')
-        input_MAIL.send_keys("juris.skribis@gmail.com")
+        input_MAIL.send_keys(mani_dati.epasts)
         time.sleep(1)
         btn_SENDMAIL = driver.find_element_by_xpath('//*[@id="modal"]/div/div/div[4]/div[2]/div/div/button')
         btn_SENDMAIL.click()
