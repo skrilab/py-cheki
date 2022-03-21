@@ -27,10 +27,10 @@ class Clipboard:
         if msg == WM_CLIPBOARDUPDATE:
             print('Clipboard saturs ir jaunināts!')
             
-#           get_data.write_logfile()
             get_data.write_tempfile()
             get_data.get_data()
-#           get_data.fill_form()
+            get_data.write_logfile()
+            get_data.fill_form()
 #           get_data.del_tempfile()
         return 0
 

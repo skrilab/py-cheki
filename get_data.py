@@ -23,8 +23,8 @@ paraugs_8 = ["55403012521"]   # 8. paraugs | Meness aptieka
 
 #virsiDus = "40003242733"        # 3. paraugs | Virši-A DUS
 #megoVeikals = "40003642393"     # 2. paraugs | Mego veikals
-#menessAptieka = "55403012521"   # 8. paraugs | Meness aptieka
-#maximaVeikals = "40003520643"   # 3. paraugs | Maxima veikals
+menessAptieka = "55403012521"   # 8. paraugs | Meness aptieka
+maximaVeikals = "40003520643"   # 3. paraugs | Maxima veikals
 #apotheka_aptieka = "40003723815" # 2. paraugs | Apotheka aptieka
 
 
@@ -37,15 +37,18 @@ def write_tempfile():
     targetFile = os.path.join(cwd, timestr + ".txt")
     temp_file = open(targetFile, "w", encoding="utf-8")
     
-    temp_line = dati.replace("\r", "!")
-   
-    no_lbreaks = ""
-    for line in temp_line:
-        strip_line = line.rstrip("\r\n")
-        no_lbreaks += strip_line
-        
-    temp_file.write(no_lbreaks.replace("!!", " "))
+#    temp_line = dati.replace("\r", "!")
+    temp_line = dati.replace("\n", " ")
+#    temp_line = temp_line.replace("  ", " ")
+    temp_file.write(temp_line)
     temp_file.close()
+  
+#    no_lbreaks = ""
+#    for line in temp_line:
+#        strip_line = line.rstrip("\r\n")
+#        no_lbreaks += strip_line
+#    temp_file.write(no_lbreaks.replace("!!", " "))
+#    temp_file.close()
 
 
 # Funkcija pagaidu datu faila dzesanai
@@ -68,11 +71,10 @@ def get_data():
     global veikals_Orig_DATUMS
 
     # Clipboad datos samekle PVN numuru. Pagaidam caur error handling funkciju;
-#    try:
-#       veikals_PVN = re.findall(r"(4000\d\d\d\d\d\d\d)", data)[0] # Visi
-    veikals_PVN = re.findall(r"(4000\d\d\d\d\d\d\d)", data)[0] # Visi ar LV4000 kodiem
-#    except:
-#        veikals_PVN = re.findall(r"LV(55\d\d\d\d\d\d\d\d\d)", data)[0] # ar LV55xxx kodiem, piem. Meness aptieka
+    try:
+        veikals_PVN = re.findall(r"(4000\d\d\d\d\d\d\d)", data)[0] # Visi ar LV4000 kodiem
+    except:
+        veikals_PVN = re.findall(r"LV(55\d\d\d\d\d\d\d\d\d)", data)[0] # ar LV55xxx kodiem, piem. Meness aptieka
     print(veikals_PVN)
 
 
@@ -105,49 +107,27 @@ def get_data():
         veikals_DATUMS = virsiDus_datums
 
 ### paraugs_2
-    # Mego...
-#    elif veikals_PVN == megoVeikals:
-#        print("Found Mego veikals!")
     elif veikals_PVN in paraugs_2:
         print("Noteikts 2. parauga čeks")
         
         kases_nr = re.search(r"(?<=numurs: )SP-LV\d+|(?<=numurs: )AI\d+|Al\d+", data)[0]
         print(kases_nr)
 #        megoVeikals_kase = re.findall(r"numurs: (SP-LV\d+)", data)[0]
-#        print(megoVeikals_kase)
-#        veikals_KASE = megoVeikals_kase
         if kases_nr.startswith("Al") == True:
             kases_nr = kases_nr.replace("Al", "AI")
 #            print(kases_nr)
         veikals_KASE = kases_nr
 
-#        megoVeikals_ceks = re.findall(r"(\d+/\d+).Kase", data)[0]     # 12.02.2022 labots regex
-#        print(megoVeikals_ceks)
-#        veikals_CEKS = megoVeikals_ceks
-        ceka_nr = re.findall(r"(\d+/\d+).Kase", data)[0]
+        ceka_nr = re.findall(r"Dok. Nr.: (\d+/\d+)", data)[0] 
         print(ceka_nr)
         veikals_CEKS = ceka_nr
 
-        #megoVeikals_summa = re.findall(r"(\d+.\d+).EUR", data)[0]
-#        megoVeikals_summa = re.findall(r"[SUMMA:\n|SUMMA:\n\n](\d+.\d\d).EUR", data)[0]
-        ceka_summa = re.findall(r"Samaksai EUR (\d+,\d+) ", data)[0]
+        ceka_summa = re.findall(r"Samaksai EUR  (\d+,\d+)", data)[0]
         print(ceka_summa)    
         veikals_SUMMA = ceka_summa
 
-#        megoVeikals_datums = re.findall(r"Datums:.(\d\d.\d\d.\d\d\d\d)", data)[0]
-        #print( megoVeikals_datums)
-#        veikals_Orig_DATUMS = megoVeikals_datums
-#        if megoVeikals_datums[0] == "0":
-#            megoVeikals_datums = megoVeikals_datums.replace('0', '')[0]
-#            print(megoVeikals_datums)
-#            veikals_DATUMS = megoVeikals_datums
-#        else:
-#            megoVeikals_datums = megoVeikals_datums[:2]
-#            print(megoVeikals_datums)
-#            veikals_DATUMS = megoVeikals_datums
-
         ceka_datums = re.findall(r"(\d+-\d+-\d+).\d.:\d.:\d.", data)[0]
-# veikals_Orig_DATUMS ir log vajadzibam
+        # veikals_Orig_DATUMS ir log vajadzibam
         veikals_Orig_DATUMS = ceka_datums
         if ceka_datums[8] == "0":
             ceka_datums = ceka_datums.replace('0', '')[6]
@@ -213,35 +193,6 @@ def get_data():
             print(menessAptieka_datums)
             veikals_DATUMS = menessAptieka_datums
 
-   # Apotheka aptieka...
-#    elif veikals_PVN == apotheka_aptieka:
-#        print("Found Apotheka aptieka!")
-
-#        apotheka_aptieka_kase = re.findall(r"numurs: (AI\d+|Al\d+)", data)[0]
-#        if apotheka_aptieka_kase.startswith("Al") == True:
-#            apotheka_aptieka_kase = apotheka_aptieka_kase.replace("Al", "AI")
-#        print(apotheka_aptieka_kase)
-#        veikals_KASE = apotheka_aptieka_kase
-    
-#        apotheka_aptieka_ceks = re.findall(r"(\d+/\d+).Kase", data)[0]
-#        print(apotheka_aptieka_ceks)
-#        veikals_CEKS = apotheka_aptieka_ceks
-
-        apotheka_aptieka_summa = re.findall(r'Samaksai EUR\r\n\r\n(\d+.\d\d)', data)[0]
-        print(apotheka_aptieka_summa)    
-        veikals_SUMMA = apotheka_aptieka_summa
-
-        apotheka_aptieka_datums = re.findall(r"(\d+-\d+-\d+).\d.:\d.", data)[0]
-        veikals_Orig_DATUMS = apotheka_aptieka_datums
-        if apotheka_aptieka_datums[8] == "0":
-            apotheka_aptieka_datums = apotheka_aptieka_datums.replace('0', '')[6]
-            print(apotheka_aptieka_datums)
-            veikals_DATUMS = apotheka_aptieka_datums
-        else:
-            apotheka_aptieka_datums = apotheka_aptieka_datums[8:]
-            print(apotheka_aptieka_datums)
-            veikals_DATUMS = apotheka_aptieka_datums
-
 
 # Fukncija lai izveidotu jaunu log failu un ierakstitu izguto datu (caur regex) saturu;
 def write_logfile():
@@ -272,7 +223,9 @@ def fill_form():
     time.sleep(0.5)
 
     # akceptejam Cookies;
-    btn_cookie = driver.find_element_by_xpath('//*[@id="app"]/div/div[5]/button')
+    #btn_cookie = driver.find_element_by_xpath('//*[@id="app"]/div/div[5]/button')
+    #btn_cookie = driver.find_element(By.XPATH, '//*[@id="app"]/div/div[5]/button')
+    btn_cookie = driver.find_element_by_css_selector('button.sc-hgRTRy.kHOOdZ')
     btn_cookie.click()
     time.sleep(0.5)
 

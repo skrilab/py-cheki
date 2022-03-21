@@ -5,11 +5,11 @@
 Uz doto brīdi risinājums balstās uz 'Google Lens' aplikāciju un primitīviem Python skriptu salikumiem, kuri nolasa datora 'clipboard' saturu un tajā ar 'regex' meklēšanas šabloniem mēģina atpazīt nepieciešamos datus un automātiski aizpildīt čeku iesniegumu loterijas portālā.
 
 Ņemot vērā, ka pirkumu čeku veidi ir dažādi un katra čeka atpazīšanai sākotnēji ir nepieciešams manuāls darbs, tad uz doto brīdi risinājums spēj atrast nepieciešamos datus tikai zemāk uzrādīto uzņēmumu čekos:
- - Virši-A DUS
+ ~~- Virši-A DUS~
  - Mego veikals
- - Mēness aptieka
- - Maxima veikals
- - Apotheka aptieka
+ ~~- Mēness aptieka~
+ ~~- Maxima veikals~
+ ~~- Apotheka aptieka~
 
 ### Pilnvērtīga risinājuma lietošanai nepieciešams:
 - Dators ar:
