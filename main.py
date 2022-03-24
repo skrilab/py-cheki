@@ -31,7 +31,6 @@ class Clipboard:
             get_data.get_data()
             get_data.write_logfile()
             get_data.fill_form()
-#           get_data.del_tempfile()
         return 0
 
     def listen(self):

@@ -3,6 +3,8 @@ import re
 from lib2to3.pgen2 import driver
 from xml.dom.minidom import Element
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
 import time
 import os.path
 import ctypes
@@ -13,7 +15,8 @@ class MbConstants:
     IDCANCEL = 2
     IDOK = 1
 
-PATH = "C:\chromedriver_win32\chromedriver.exe"
+#PATH = "C:\chromedriver_win32\chromedriver.exe"
+PATH = Service("C:\chromedriver_win32\chromedriver.exe")
 
 
 # Definejam zinamo veikalu PVN reg. NR. (pec siem tiek noteikts ceka paraugs);
@@ -49,11 +52,6 @@ def write_tempfile():
 #        no_lbreaks += strip_line
 #    temp_file.write(no_lbreaks.replace("!!", " "))
 #    temp_file.close()
-
-
-# Funkcija pagaidu datu faila dzesanai
-def del_tempfile():
-    os.remove(targetFile)
 
 
 # Funkcija lai izgutu nepieciesamos datus no clipboard satura;
@@ -217,48 +215,51 @@ def message_window(message, title):
 
 # Funkcija lai automatiski aizpilditu formu ar iegutajiem datiem;
 def fill_form():
-    driver = webdriver.Chrome(PATH)
+    driver = webdriver.Chrome(service=PATH)
+    #driver = webdriver.Chrome(PATH)
+    driver.maximize_window()
+    time.sleep(2)
     driver.get('https://cekuloterija.lv/')
     #print(driver.title)
     time.sleep(0.5)
 
     # akceptejam Cookies;
-    #btn_cookie = driver.find_element_by_xpath('//*[@id="app"]/div/div[5]/button')
-    #btn_cookie = driver.find_element(By.XPATH, '//*[@id="app"]/div/div[5]/button')
-    btn_cookie = driver.find_element_by_css_selector('button.sc-hgRTRy.kHOOdZ')
+    btn_cookie = driver.find_element(By.XPATH, '//*[@id="app"]/div/div[5]/button')
     btn_cookie.click()
     time.sleep(0.5)
 
     # izvelamies iesniegt ceku;
-    btn_inCeks = driver.find_element_by_css_selector('button.sc-bdVaJa')
-    btn_inCeks.click()
+    btn_inceks = driver.find_element(By.XPATH, '//*[@id="app"]/div/header/div[2]/div[2]/div[2]/div[3]/div/button[1]')
+    btn_inceks.click()
     time.sleep(1)
 
     # ievadam PVN nr.;
-    input_PVN = driver.find_element_by_name('taxpayer_number')
+    input_PVN = driver.find_element(By.NAME, 'taxpayer_number')
     input_PVN.send_keys(veikals_PVN)
     time.sleep(0.8)
 
     # ievadam kases aparata nr.;
-    input_KASE = driver.find_element_by_name('cash_register_number')
+    input_KASE = driver.find_element(By.NAME, 'cash_register_number')
     input_KASE.send_keys(veikals_KASE)
     time.sleep(0.8)
 
     # ievadam ceka nr.;
-    input_CEKS = driver.find_element_by_name('number')
+    input_CEKS = driver.find_element(By.NAME, 'number')
     input_CEKS.send_keys(veikals_CEKS)
     time.sleep(0.8)
 
     # ievadam ceka summu;
-    input_SUM = driver.find_element_by_name('amount')
+    #input_SUM = driver.find_element_by_name('amount')
+    input_SUM = driver.find_element(By.NAME, 'amount')
     input_SUM.send_keys(veikals_SUMMA)
     time.sleep(0.8)
 
     # izvelamies kalendaru un ievadam ceka datumu;
-    btn_CAL = driver.find_element_by_xpath('//*[@id="modal"]/div/div/div[2]/div[1]/div[7]/div')
+    btn_CAL = driver.find_element(By.XPATH, '//*[@id="modal"]/div/div/div[2]/div[1]/div[7]/div')
     btn_CAL.click()
     time.sleep(0.5)
 
+    #for elem in driver.find_element(By.XPATH, '//span[@class = "MuiIconButton-label"]'):
     for elem in driver.find_elements_by_xpath("//span[@class = 'MuiIconButton-label']"):
         print(elem.text)
         #if elem.text == '1':
@@ -268,27 +269,31 @@ def fill_form():
     time.sleep(1)
 
     # ievadam tel. nr.;
-    input_TEL = driver.find_element_by_name('phone')
+    input_TEL = driver.find_element(By.NAME, 'phone')
     input_TEL.send_keys(mani_dati.telefons)
     user_input = message_window(veikals_KASE + '\n' + veikals_CEKS + '\n' + veikals_SUMMA + '\n' + veikals_Orig_DATUMS + '\n',"Datu salīdzināšana")
     if  user_input == MbConstants.IDOK:
         print("ok pressed")
 # iesniedzam formu;
-        btn_FIN = driver.find_element_by_xpath('//*[@id="modal"]/div/div/div[2]/div[1]/button')
+        btn_FIN = driver.find_element(By.XPATH, '//*[@id="modal"]/div/div/div[2]/div[1]/button')
         btn_FIN.click()
         time.sleep(1)    
 # izvelamies e-pasta apstiprinajumu par dalibu;
-        btn_MAIL = driver.find_element_by_xpath('//*[@id="modal"]/div/div/div[4]/div[2]/button[2]')
+        btn_MAIL = driver.find_element(By.XPATH, '//*[@id="modal"]/div/div/div[4]/div[2]/button[2]')
         btn_MAIL.click()
         time.sleep(0.5)
 # aizpildam e-pasta formu;
-        input_MAIL = driver.find_element_by_name('email')
+        #input_MAIL = driver.find_element(By.NAME, 'email')
+        input_MAIL = driver.find_element(By.XPATH, '//*[@id="modal"]/div/div/div[4]/div[3]/div/div/div/input')
         input_MAIL.send_keys(mani_dati.epasts)
         time.sleep(1)
-        btn_SENDMAIL = driver.find_element_by_xpath('//*[@id="modal"]/div/div/div[4]/div[2]/div/div/button')
+        btn_SENDMAIL = driver.find_element(By.XPATH, '//*[@id="modal"]/div/div/div[4]/div[3]/div/button')
+        #btn_SENDMAIL = driver.find_element_by_xpath('//*[@id="modal"]/div/div/div[4]/div[2]/div/div/button')
         btn_SENDMAIL.click()
         time.sleep(5)    
         driver.quit()
+        os.remove(targetFile)
     elif user_input == MbConstants.IDCANCEL:
         print("cancel presssed")
         driver.quit()
+        os.remove(targetFile)
