@@ -26,7 +26,6 @@ class Clipboard:
         WM_CLIPBOARDUPDATE = 0x031D
         if msg == WM_CLIPBOARDUPDATE:
             print('Clipboard saturs ir jaunināts!')
-            
             get_data.write_tempfile()
             get_data.get_data()
             get_data.write_logfile()

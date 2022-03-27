@@ -19,11 +19,12 @@ class MbConstants:
 #PATH = "C:\chromedriver_win32\chromedriver.exe"
 #PATH = Service("C:\chromedriver_win32\chromedriver.exe")
 PATH = Service("C:\chromedriver_win32\geckodriver.exe")
+LOGPATH = ("C:\chromedriver_win32\geckodriver.log")
 
 
 # Definejam zinamo veikalu PVN reg. NR. (pec siem tiek noteikts ceka paraugs);
 paraugs_2 = ["40003642393","40003723815"]   # 2. paraugs | Mego veikals, Apotheka aptieka
-paraugs_3 = ["40003242733","40003520643"]   # 3. paraugs | Virši-A DUS, Maxima veikals
+paraugs_3 = ["40003242737","40003520643"]   # 3. paraugs | Virši-A DUS, Maxima veikals
 paraugs_8 = ["55403012521"]   # 8. paraugs | Meness aptieka
 
 #virsiDus = "40003242733"        # 3. paraugs | Virši-A DUS
@@ -67,31 +68,33 @@ def get_data():
 
     # Nosaka ceka paraugu un izgust vajadzigos datus;
 ### paraugs_3
-    # Virsi...
-#    if veikals_PVN == virsiDus:
-#        print("Found Virši-A DUS!")
     if veikals_PVN in paraugs_3:
-        print("Noteikts 2. parauga čeks")
+        print("Noteikts 3. parauga čeks")
 
-        virsiDus_kase = re.findall(r"Nr.(\d.R\d+)", data)[0]
-        print(virsiDus_kase)
-        veikals_KASE = virsiDus_kase
+        kases_nr = re.findall(r"Nr.(\d.R\d+)", data)[0]
+        print(kases_nr)
+        veikals_KASE = kases_nr
     
-        virsiDus_ceks = re.findall(r"eks.(\d./\d+)", data)[0]
-        print(virsiDus_ceks)
-        veikals_CEKS = virsiDus_ceks
+        ceka_nr = re.findall(r"eks (\d+/\d+)", data)[0]
+        print(ceka_nr)
+        veikals_CEKS = ceka_nr
 
-        virsiDus_summa = re.findall(r"(\d+,\d+).EUR", data)[0]
-        print(virsiDus_summa)    
-        veikals_SUMMA = virsiDus_summa
+        ceka_summa = re.findall(r"apmaksai  (\d+,\d+)", data)[0]
+        print(ceka_summa)    
+        veikals_SUMMA = ceka_summa
 
-        virsiDus_datums = re.findall(r"(\d\d.\d\d.\d\d\d\d).\d.:\d.:\d.", data)[0]
-        #print(virsiDus_datums)
-        veikals_Orig_DATUMS = virsiDus_datums
-        if virsiDus_datums[0] == "0":
-            virsiDus_datums = virsiDus_datums.replace('0', '')[0]
-            print(virsiDus_datums)
-        veikals_DATUMS = virsiDus_datums
+        ceka_datums = re.findall(r"(\d\d.\d\d.\d\d\d\d).\d.:\d.", data)[0]
+        # veikals_Orig_DATUMS ir log vajadzibam
+        veikals_Orig_DATUMS = ceka_datums
+        if ceka_datums[0] == "0":
+            ceka_datums = ceka_datums.replace('0', '')[0]
+            print(ceka_datums)
+            veikals_DATUMS = ceka_datums
+        else:
+            ceka_datums = ceka_datums[0:2]
+            print(ceka_datums)
+            veikals_DATUMS = ceka_datums
+          
 
 ### paraugs_2
     elif veikals_PVN in paraugs_2:
@@ -156,19 +159,16 @@ def get_data():
 # Meness aptieka...
     elif veikals_PVN in paraugs_8:
         print("Noteikts 8. parauga čeks")
-    
-    #if veikals_PVN == menessAptieka:
-    #    print("Found Mēness aptieka!")
-        kases_nr = re.findall(r"SAS. NR: (75000\d\d\d)", data)[0]
+
+        kases_nr = re.search(r"(?<=.AS. NR:  )75000\d\d\d|(?<=.AS. NR: )75000\d\d\d", data)[0]
         print(kases_nr)
         veikals_KASE = kases_nr
     
-        ceka_nr = re.findall(r"DOK. NR: (\d+)", data)[0]
+        ceka_nr = re.search(r"(?<=DOK. NR: )\d+|(?<=DOK. NR:  )\d+", data)[0]
         print(ceka_nr)
         veikals_CEKS = ceka_nr
 
-        #ceka_summa = re.findall(r"[KOPA\n+](\d+,\d+).EUR", data)[0]
-        ceka_summa = re.findall(r"SUMMA APMAKSAI  (\d+.\d+)", data)[0]
+        ceka_summa = re.search(r"(?<=SUMMA APMAKSAI  )\d+.\d+|(?<=SUMMA APMAKSAI )\d+.\d+", data)[0]
         print(ceka_summa)    
         veikals_SUMMA = ceka_summa
 
@@ -208,7 +208,8 @@ def message_window(message, title):
 
 # Funkcija lai automatiski aizpilditu formu ar iegutajiem datiem;
 def fill_form():
-    driver = webdriver.Firefox(service=PATH)
+    #driver = webdriver.Firefox(service=PATH)
+    driver = webdriver.Firefox(service=PATH, log_path=LOGPATH)
     #driver = webdriver.Chrome(service=PATH)
     driver.maximize_window()
     time.sleep(2)
@@ -283,9 +284,10 @@ def fill_form():
         btn_SENDMAIL.click()
         time.sleep(5)    
         driver.quit()
-        os.remove(targetFile)
+        #os.remove("*.dati")
     
     elif user_input == MbConstants.IDCANCEL:
         print("Iesniegums atcelts!")
         driver.quit()
-        os.remove(targetFile)
+        #os.remove("*.dati")
+        #https://www.codegrepper.com/code-examples/python/delete+all+txt+files+in+directory+python
