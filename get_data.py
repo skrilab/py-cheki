@@ -4,7 +4,8 @@ from lib2to3.pgen2 import driver
 from xml.dom.minidom import Element
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
+#from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.firefox.service import Service
 import time
 import os.path
 import ctypes
@@ -16,7 +17,8 @@ class MbConstants:
     IDOK = 1
 
 #PATH = "C:\chromedriver_win32\chromedriver.exe"
-PATH = Service("C:\chromedriver_win32\chromedriver.exe")
+#PATH = Service("C:\chromedriver_win32\chromedriver.exe")
+PATH = Service("C:\chromedriver_win32\geckodriver.exe")
 
 
 # Definejam zinamo veikalu PVN reg. NR. (pec siem tiek noteikts ceka paraugs);
@@ -25,10 +27,8 @@ paraugs_3 = ["40003242733","40003520643"]   # 3. paraugs | Virši-A DUS, Maxima 
 paraugs_8 = ["55403012521"]   # 8. paraugs | Meness aptieka
 
 #virsiDus = "40003242733"        # 3. paraugs | Virši-A DUS
-#megoVeikals = "40003642393"     # 2. paraugs | Mego veikals
 menessAptieka = "55403012521"   # 8. paraugs | Meness aptieka
 maximaVeikals = "40003520643"   # 3. paraugs | Maxima veikals
-#apotheka_aptieka = "40003723815" # 2. paraugs | Apotheka aptieka
 
 
 # Fukncija lai izveidotu jaunu pagaidu clipboard datu uzglabasanas failu talakai datu apstradei;
@@ -37,27 +37,16 @@ def write_tempfile():
     cwd = os.getcwd()
     timestr = time.strftime("%d%m%Y-%H%M%S")
     global targetFile
-    targetFile = os.path.join(cwd, timestr + ".txt")
+    targetFile = os.path.join(cwd, timestr + ".dati")
     temp_file = open(targetFile, "w", encoding="utf-8")
-    
-#    temp_line = dati.replace("\r", "!")
     temp_line = dati.replace("\n", " ")
-#    temp_line = temp_line.replace("  ", " ")
     temp_file.write(temp_line)
     temp_file.close()
-  
-#    no_lbreaks = ""
-#    for line in temp_line:
-#        strip_line = line.rstrip("\r\n")
-#        no_lbreaks += strip_line
-#    temp_file.write(no_lbreaks.replace("!!", " "))
-#    temp_file.close()
 
 
 # Funkcija lai izgutu nepieciesamos datus no clipboard satura;
 def get_data():
     #Definejam clipboard saturu;    
-#    data = clipboard.paste()
     data = open(targetFile, "r", encoding="utf-8")
     data = str(data.read())
     
@@ -113,7 +102,6 @@ def get_data():
 #        megoVeikals_kase = re.findall(r"numurs: (SP-LV\d+)", data)[0]
         if kases_nr.startswith("Al") == True:
             kases_nr = kases_nr.replace("Al", "AI")
-#            print(kases_nr)
         veikals_KASE = kases_nr
 
         ceka_nr = re.findall(r"Dok. Nr.: (\d+/\d+)", data)[0] 
@@ -164,32 +152,37 @@ def get_data():
             print(maximaVeikals_datums)
             veikals_DATUMS = maximaVeikals_datums
 
-    # Meness aptieka...
-    if veikals_PVN == menessAptieka:
-        print("Found Mēness aptieka!")
+### paraugs_8
+# Meness aptieka...
+    elif veikals_PVN in paraugs_8:
+        print("Noteikts 8. parauga čeks")
     
-        menessAptieka_kase = re.findall(r"[SAS. NR:\n+](75000\d\d\d)", data)[0]
-        print(menessAptieka_kase)
-        veikals_KASE = menessAptieka_kase
+    #if veikals_PVN == menessAptieka:
+    #    print("Found Mēness aptieka!")
+        kases_nr = re.findall(r"SAS. NR: (75000\d\d\d)", data)[0]
+        print(kases_nr)
+        veikals_KASE = kases_nr
     
-        menessAptieka_ceks = re.findall(r"DOK.+NR: (\d+)", data)[0]
-        print(menessAptieka_ceks)
-        veikals_CEKS = menessAptieka_ceks
+        ceka_nr = re.findall(r"DOK. NR: (\d+)", data)[0]
+        print(ceka_nr)
+        veikals_CEKS = ceka_nr
 
-        menessAptieka_summa = re.findall(r"[KOPA\n+](\d+,\d+).EUR", data)[0]
-        print(menessAptieka_summa)    
-        veikals_SUMMA = menessAptieka_summa
+        #ceka_summa = re.findall(r"[KOPA\n+](\d+,\d+).EUR", data)[0]
+        ceka_summa = re.findall(r"SUMMA APMAKSAI  (\d+.\d+)", data)[0]
+        print(ceka_summa)    
+        veikals_SUMMA = ceka_summa
 
-        menessAptieka_datums = re.findall(r"(\d+-\d+-\d+).\d.:\d.", data)[0]
-        veikals_Orig_DATUMS = menessAptieka_datums
-        if menessAptieka_datums[8] == "0":
-            menessAptieka_datums = menessAptieka_datums.replace('0', '')[6]
-            print(menessAptieka_datums)
-            veikals_DATUMS = menessAptieka_datums
+        ceka_datums = re.findall(r"(\d+-\d+-\d+).\d.:\d.", data)[0]
+        # veikals_Orig_DATUMS ir log vajadzibam
+        veikals_Orig_DATUMS = ceka_datums
+        if ceka_datums[8] == "0":
+            ceka_datums = ceka_datums.replace('0', '')[6]
+            print(ceka_datums)
+            veikals_DATUMS = ceka_datums
         else:
-            menessAptieka_datums = menessAptieka_datums[8:]
-            print(menessAptieka_datums)
-            veikals_DATUMS = menessAptieka_datums
+            ceka_datums = ceka_datums[8:]
+            print(ceka_datums)
+            veikals_DATUMS = ceka_datums
 
 
 # Fukncija lai izveidotu jaunu log failu un ierakstitu izguto datu (caur regex) saturu;
@@ -215,12 +208,11 @@ def message_window(message, title):
 
 # Funkcija lai automatiski aizpilditu formu ar iegutajiem datiem;
 def fill_form():
-    driver = webdriver.Chrome(service=PATH)
-    #driver = webdriver.Chrome(PATH)
+    driver = webdriver.Firefox(service=PATH)
+    #driver = webdriver.Chrome(service=PATH)
     driver.maximize_window()
     time.sleep(2)
     driver.get('https://cekuloterija.lv/')
-    #print(driver.title)
     time.sleep(0.5)
 
     # akceptejam Cookies;
@@ -259,10 +251,10 @@ def fill_form():
     btn_CAL.click()
     time.sleep(0.5)
 
+    # zemak ar jauno By.XPATH nezinu kapec, bet nestrada...
     #for elem in driver.find_element(By.XPATH, '//span[@class = "MuiIconButton-label"]'):
     for elem in driver.find_elements_by_xpath("//span[@class = 'MuiIconButton-label']"):
         print(elem.text)
-        #if elem.text == '1':
         if elem.text == veikals_DATUMS:
             elem.click()
             break
@@ -273,27 +265,27 @@ def fill_form():
     input_TEL.send_keys(mani_dati.telefons)
     user_input = message_window(veikals_KASE + '\n' + veikals_CEKS + '\n' + veikals_SUMMA + '\n' + veikals_Orig_DATUMS + '\n',"Datu salīdzināšana")
     if  user_input == MbConstants.IDOK:
-        print("ok pressed")
-# iesniedzam formu;
+        print("Dati OK, iesniedzam!")
+        # iesniedzam formu;
         btn_FIN = driver.find_element(By.XPATH, '//*[@id="modal"]/div/div/div[2]/div[1]/button')
         btn_FIN.click()
         time.sleep(1)    
-# izvelamies e-pasta apstiprinajumu par dalibu;
+    
+        # izvelamies e-pasta apstiprinajumu par dalibu;
         btn_MAIL = driver.find_element(By.XPATH, '//*[@id="modal"]/div/div/div[4]/div[2]/button[2]')
         btn_MAIL.click()
         time.sleep(0.5)
-# aizpildam e-pasta formu;
-        #input_MAIL = driver.find_element(By.NAME, 'email')
+        # aizpildam e-pasta formu ar nosutisanu;
         input_MAIL = driver.find_element(By.XPATH, '//*[@id="modal"]/div/div/div[4]/div[3]/div/div/div/input')
         input_MAIL.send_keys(mani_dati.epasts)
         time.sleep(1)
         btn_SENDMAIL = driver.find_element(By.XPATH, '//*[@id="modal"]/div/div/div[4]/div[3]/div/button')
-        #btn_SENDMAIL = driver.find_element_by_xpath('//*[@id="modal"]/div/div/div[4]/div[2]/div/div/button')
         btn_SENDMAIL.click()
         time.sleep(5)    
         driver.quit()
         os.remove(targetFile)
+    
     elif user_input == MbConstants.IDCANCEL:
-        print("cancel presssed")
+        print("Iesniegums atcelts!")
         driver.quit()
         os.remove(targetFile)
