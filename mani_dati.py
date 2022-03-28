@@ -1,2 +1,2 @@
-epasts = "epasta.adrese@domens.lv"
+epasts = "juris.skribis@gmail.com"
 telefons = "2xxxxxxx"
