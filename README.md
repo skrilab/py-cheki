@@ -13,10 +13,10 @@ Uz doto brīdi risinājums balstās uz 'Google Lens' aplikāciju un primitīviem
 ### Pilnvērtīga risinājuma lietošanai nepieciešams:
 - Dators ar:
     - Uzstādītu 'Python 3.9.x' (vai jaunāku) un papildus moduļiem (skat. zemāk 'Python vides sagatavošana');
-    - Lejupielādētu 'GeckoDriver' web aplikāciju testēšanas rīku/serveri (to var iegūt [šeit](https://github.com/mozilla/geckodriver/releases){:target="\_blank"});
+    - Lejupielādētu 'GeckoDriver' web aplikāciju testēšanas rīku/serveri (to var iegūt [šeit](https://github.com/mozilla/geckodriver/releases));
         - 'geckodriver.exe' izpildāmais fails jānovieto 'C:\webdriver\\' mapē (nekāda instalācija nav nepieciešama);
     - Mozilla Firefox interneta pārlūku un tajā pierakstītu (signed-in) Google kontu;
-- Android telefons ar Google kontu un uzstādītu 'Google Lens' aplikāciju (to var iegūt [šeit](https://play.google.com/store/apps/details?id=com.google.ar.lens){:target="\_blank"});
+- Android telefons ar Google kontu un uzstādītu 'Google Lens' aplikāciju (to var iegūt [šeit](https://play.google.com/store/apps/details?id=com.google.ar.lens));
     - Apple iekārtas nav pārbaudītas.
 
 
