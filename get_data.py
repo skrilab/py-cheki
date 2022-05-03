@@ -16,10 +16,8 @@ class MbConstants:
     IDCANCEL = 2
     IDOK = 1
 
-#PATH = "C:\chromedriver_win32\chromedriver.exe"
-#PATH = Service("C:\chromedriver_win32\chromedriver.exe")
-PATH = Service("C:\chromedriver_win32\geckodriver.exe")
-LOGPATH = ("C:\chromedriver_win32\geckodriver.log")
+PATH = Service("C:\webdriver\geckodriver.exe")
+LOGPATH = ("C:\webdriver\geckodriver.log")
 
 
 # Definejam zinamo veikalu PVN reg. NR. (pec siem tiek noteikts ceka paraugs);
@@ -79,7 +77,9 @@ def get_data():
         print(ceka_nr)
         veikals_CEKS = ceka_nr
 
-        ceka_summa = re.findall(r"apmaksai  (\d+,\d+)", data)[0]
+        #ceka_summa = re.findall(r"apmaksai  (\d+,\d+)", data)[0]
+        #ceka_summa = re.findall(r"kopā  (\d+,\d+)|apmaksai  (\d+,\d+)", data)[0] # labots 03.05.2022 v1
+        ceka_summa = re.search(r"(?<=kopā  )\d+,\d+|(?<=apmaksai  )\d+,\d+", data)[0] # labots 03.05.2022 v2
         print(ceka_summa)    
         veikals_SUMMA = ceka_summa
 
