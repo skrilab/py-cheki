@@ -21,12 +21,16 @@ LOGPATH = ("C:\webdriver\geckodriver.log")
 
 
 # Definejam zinamo veikalu PVN reg. NR. (pec siem tiek noteikts ceka paraugs);
-paraugs_2 = ["40003642393","40003723815"]   # 2. paraugs | Mego veikals, Apotheka aptieka
-paraugs_3 = ["40003242737","40003520643"]   # 3. paraugs | Virši-A DUS, Maxima veikals
+paraugs_2 = ["40003642393","40003723815","40003053029","40003610082","40003530961"]   # 2. paraugs | Mego veikals, Apotheka aptieka, RIMI, Apranga, Sportland
+paraugs_3 = ["40003242737","40003520643","40203062113"]   # 3. paraugs | Virši-A DUS, Maxima veikals, Pepco Latvia
 paraugs_8 = ["55403012521"]   # 8. paraugs | Meness aptieka
 
-#virsiDus = "40003242733"        # 3. paraugs | Virši-A DUS
-menessAptieka = "55403012521"   # 8. paraugs | Meness aptieka
+#virsiDus = "40003242733"       # 3. paraugs | Virši-A DUS
+#RIMI = "40003053029"           # 2. paraugs | RIMI
+#PepcoLatvia = "40203062113"    # 3. paraugs | Pepco Latvia
+#menessAptieka = "55403012521"  # 8. paraugs | Meness aptieka
+#Apranga = "40003610082"        # 2. paraugs | Apranga
+#Sportland = "40003530961"      # 2. paraugs | Sportland
 maximaVeikals = "40003520643"   # 3. paraugs | Maxima veikals
 
 
@@ -58,7 +62,8 @@ def get_data():
 
     # Clipboad datos samekle PVN numuru. Pagaidam caur error handling funkciju;
     try:
-        veikals_PVN = re.findall(r"(4000\d\d\d\d\d\d\d)", data)[0] # Visi ar LV4000 kodiem
+        veikals_PVN = re.findall(r"(40\d0\d\d\d\d\d\d\d)", data)[0] # Visi ar LV4000 kodiem | 01.06.2022 izveidots Pepco iznemums
+        #veikals_PVN = re.findall(r"(4000\d\d\d\d\d\d\d)", data)[0] # Visi ar LV4000 kodiem
     except:
         veikals_PVN = re.findall(r"LV(55\d\d\d\d\d\d\d\d\d)", data)[0] # ar LV55xxx kodiem, piem. Meness aptieka
     print(veikals_PVN)
@@ -69,7 +74,8 @@ def get_data():
     if veikals_PVN in paraugs_3:
         print("Noteikts 3. parauga čeks")
 
-        kases_nr = re.findall(r"Nr.(\d.R\d+)", data)[0]
+        #kases_nr = re.findall(r"Nr.(\d.R\d+)", data)[0]
+        kases_nr = re.search(r"(?<=Nr.)\d.R\d+|(?<=Nr.)\d.HTM\d+", data)[0] #labots 01.06.2022 Pecpo kases nr.
         print(kases_nr)
         veikals_KASE = kases_nr
     

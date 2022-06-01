@@ -9,13 +9,18 @@ Uz doto brīdi risinājums balstās uz 'Google Lens' aplikāciju un primitīviem
  - Mego veikals
  - Mēness aptieka
  - Apotheka aptieka
+ - RIMI
+ - Pepco Latvia
+ - Apranga
+ - Sportland
 
 ### Pilnvērtīga risinājuma lietošanai nepieciešams:
 - Dators ar:
     - Uzstādītu 'Python 3.9.x' (vai jaunāku) un papildus moduļiem (skat. zemāk 'Python vides sagatavošana');
     - Lejupielādētu 'GeckoDriver' web aplikāciju testēšanas rīku/serveri (to var iegūt [šeit](https://github.com/mozilla/geckodriver/releases));
         - 'geckodriver.exe' izpildāmais fails jānovieto 'C:\webdriver\\' mapē (nekāda instalācija nav nepieciešama);
-    - Mozilla Firefox interneta pārlūku un tajā pierakstītu (signed-in) Google kontu;
+    - Mozilla Firefox interneta pārlūku;
+    - Google Chrome interneta pārlūku un tajā pierakstītu (signed-in) Google kontu;
 - Android telefons ar Google kontu un uzstādītu 'Google Lens' aplikāciju (to var iegūt [šeit](https://play.google.com/store/apps/details?id=com.google.ar.lens));
     - Apple iekārtas nav pārbaudītas.
 
@@ -29,13 +34,13 @@ Zemāk ir aprakstīta Python un konkrētā risinājuma sagatavošana;
 
 
 ### Lietošana
-- Atver 'Mozilla Firefox' interneta pārlūku;
+- Atver 'Google Chrome' interneta pārlūku ar pierakstītu (signed-in) Google kontu;;
 - No komandrindas palaiž 'main.py' Python skriptu: `py .\main.py`
 - Izmantojot 'Google Lens' aplikāciju nofotografē izklātu pirkuma čeku;
 - 'Google Lens' aplikācijā izvēlas sadaļu 'Text' un 'Select all';
 - Kad viss fotografētā čeka teksts ir iezīmēts, izvēlas 'Copy to computer';
 - Norāda aktīvo datoru izvēloties 'Select';
-    - Ja viss ir veiksmīgi, tad datorā jāparādās paziņojumam (notification) no interneta pārlūka;
-- Gaida Python skriptu izpildi un veiksmīga rezultāta gadījumā tiek automātiski aizpildīts čeka iesniegums https://cekuloterija.lv/ portālā;
+    - Ja viss ir veiksmīgi, tad datorā jāparādās paziņojumam (notification) no Chrome interneta pārlūka;
+- Gaida Python skriptu izpildi un veiksmīga rezultāta gadījumā Firefox interneta pārlūkā tiek automātiski aizpildīts čeka iesniegums https://cekuloterija.lv/ portālā;
     - Pirms čeka iesniegšanas ir iespēja salīdzināt datus un apstiprināt iesniegšanu vai atcelt to;
 - Procesu var turpināt ar nākošo čeku vai apturēt skripta izpildi nospiežot 'ctrl + c' kombināciju.
