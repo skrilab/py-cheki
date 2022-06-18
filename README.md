@@ -26,21 +26,21 @@ Uz doto brīdi risinājums balstās uz 'Google Lens' aplikāciju un primitīviem
 
 
 ### Python vides sagatavošana
-Zemāk ir aprakstīta Python un konkrētā risinājuma sagatavošana;
-- Izveido jaunu mapi: `mkdir "py-cheki" && cd "py-cheki"`    
-- Izveido jaunu Python virtuālo vidi: `python3 -m venv`
-- Noklonē Git repozitoriju: `git clone "https://github.com/skrilab/py-cheki.git"`
-- Uzstāda nepieciešamos Python moduļus: `pip install -r requirements.txt`
+Zemāk ir aprakstīta Python un konkrētā risinājuma sagatavošana:
+1. Izveido jaunu mapi: `mkdir "py-cheki" && cd "py-cheki"`    
+2. Izveido jaunu Python virtuālo vidi: `python3 -m venv`
+3. Noklonē Git repozitoriju: `git clone "https://github.com/skrilab/py-cheki.git"`
+4. Uzstāda nepieciešamos Python moduļus: `pip install -r requirements.txt`
 
 
 ### Lietošana
-- Atver 'Google Chrome' interneta pārlūku ar pierakstītu (signed-in) Google kontu;;
-- No komandrindas palaiž 'main.py' Python skriptu: `py .\main.py`
-- Izmantojot 'Google Lens' aplikāciju nofotografē izklātu pirkuma čeku;
-- 'Google Lens' aplikācijā izvēlas sadaļu 'Text' un 'Select all';
-- Kad viss fotografētā čeka teksts ir iezīmēts, izvēlas 'Copy to computer';
-- Norāda aktīvo datoru izvēloties 'Select';
+1. Atver 'Google Chrome' interneta pārlūku ar pierakstītu (signed-in) Google kontu;
+2. No komandrindas palaiž 'main.py' Python skriptu: `py .\main.py`
+3. Izmantojot 'Google Lens' aplikāciju nofotografē izklātu pirkuma čeku;
+4. 'Google Lens' aplikācijā izvēlas sadaļu 'Text' un 'Select all';
+5. Kad viss fotografētā čeka teksts ir iezīmēts, izvēlas 'Copy to computer';
+6. Norāda aktīvo datoru izvēloties 'Select';
     - Ja viss ir veiksmīgi, tad datorā jāparādās paziņojumam (notification) no Chrome interneta pārlūka;
-- Gaida Python skriptu izpildi un veiksmīga rezultāta gadījumā Firefox interneta pārlūkā tiek automātiski aizpildīts čeka iesniegums https://cekuloterija.lv/ portālā;
+7. Gaida Python skriptu izpildi un veiksmīga rezultāta gadījumā Firefox interneta pārlūkā tiek automātiski aizpildīts čeka iesniegums https://cekuloterija.lv/ portālā;
     - Pirms čeka iesniegšanas ir iespēja salīdzināt datus un apstiprināt iesniegšanu vai atcelt to;
-- Procesu var turpināt ar nākošo čeku vai apturēt skripta izpildi nospiežot 'ctrl + c' kombināciju.
+8. Procesu var turpināt ar nākošo čeku vai apturēt skripta izpildi nospiežot 'ctrl + c' kombināciju.

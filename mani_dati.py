@@ -1,2 +1,2 @@
-epasts = "juris.skribis@gmail.com"
+epasts = "tavs.epasts@gmail.com"
 telefons = "2xxxxxxx"
