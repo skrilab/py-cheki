@@ -16,13 +16,10 @@ class MbConstants:
     IDCANCEL = 2
     IDOK = 1
 
-PATH = Service("C:\webdriver\geckodriver.exe")
-LOGPATH = ("C:\webdriver\geckodriver.log")
-
 
 # Definejam zinamo veikalu PVN reg. NR. (pec siem tiek noteikts ceka paraugs);
 paraugs_2 = ["40003642393","40003723815","40003053029","40003610082","40003530961"]   # 2. paraugs | Mego veikals, Apotheka aptieka, RIMI, Apranga, Sportland
-paraugs_3 = ["40003242737","40003520643","40203062113"]   # 3. paraugs | Virši-A DUS, Maxima veikals, Pepco Latvia
+paraugs_3 = ["40003242737","40003520643","40203062113","40003271420"]   # 3. paraugs | Virši-A DUS, Maxima veikals, Pepco Latvia, Drogas
 paraugs_8 = ["55403012521"]   # 8. paraugs | Meness aptieka
 
 #virsiDus = "40003242733"       # 3. paraugs | Virši-A DUS
@@ -32,6 +29,7 @@ paraugs_8 = ["55403012521"]   # 8. paraugs | Meness aptieka
 #Apranga = "40003610082"        # 2. paraugs | Apranga
 #Sportland = "40003530961"      # 2. paraugs | Sportland
 maximaVeikals = "40003520643"   # 3. paraugs | Maxima veikals
+#Drogas = "40003271420"         # 3. paraugs | Drogas
 
 
 # Fukncija lai izveidotu jaunu pagaidu clipboard datu uzglabasanas failu talakai datu apstradei;
@@ -117,7 +115,8 @@ def get_data():
         print(ceka_nr)
         veikals_CEKS = ceka_nr
 
-        ceka_summa = re.findall(r"Samaksai EUR  (\d+,\d+)", data)[0]
+        ceka_summa = re.search(r"(?<=Samaksai EUR  )\d+,\d+|(?<=Samaksal EUR  )\d+,\d+", data)[0]
+        #ceka_summa = re.findall(r"Samaksai EUR  (\d+,\d+)", data)[0]
         print(ceka_summa)    
         veikals_SUMMA = ceka_summa
 
@@ -174,7 +173,7 @@ def get_data():
         print(ceka_nr)
         veikals_CEKS = ceka_nr
 
-        ceka_summa = re.search(r"(?<=SUMMA APMAKSAI  )\d+.\d+|(?<=SUMMA APMAKSAI )\d+.\d+", data)[0]
+        ceka_summa = re.search(r"(?<=SUMMA APMAKSAI  )\d+.\d+|(?<=SUMMA APMAKSAI )\d+.\d+|(?<=BANKAS KARTE  )\d+.\d+", data)[0]
         print(ceka_summa)    
         veikals_SUMMA = ceka_summa
 
@@ -214,8 +213,8 @@ def message_window(message, title):
 
 # Funkcija lai automatiski aizpilditu formu ar iegutajiem datiem;
 def fill_form():
-    #driver = webdriver.Firefox(service=PATH)
-    driver = webdriver.Firefox(service=PATH, log_path=LOGPATH)
+    PATH = Service("C:\webdriver\geckodriver.exe")
+    driver = webdriver.Firefox(service=PATH)
     #driver = webdriver.Chrome(service=PATH)
     driver.maximize_window()
     time.sleep(2)

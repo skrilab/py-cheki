@@ -13,6 +13,7 @@ Uz doto brīdi risinājums balstās uz 'Google Lens' aplikāciju un primitīviem
  - Pepco Latvia
  - Apranga
  - Sportland
+ - Drogas
 
 ### Pilnvērtīga risinājuma lietošanai nepieciešams:
 - Dators ar:
