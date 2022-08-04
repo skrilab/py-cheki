@@ -18,7 +18,7 @@ class MbConstants:
 
 
 # Definejam zinamo veikalu PVN reg. NR. (pec siem tiek noteikts ceka paraugs);
-paraugs_2 = ["40003642393","40003723815","40003053029","40003610082","40003530961"]   # 2. paraugs | Mego veikals, Apotheka aptieka, RIMI, Apranga, Sportland
+paraugs_2 = ["40003642393","40003723815","40003053029","40003610082","40003530961","50103951541"]   # 2. paraugs | Mego veikals, Apotheka aptieka, RIMI, Apranga, Sportland, IKEA
 paraugs_3 = ["40003242737","40003520643","40203062113","40003271420"]   # 3. paraugs | Virši-A DUS, Maxima veikals, Pepco Latvia, Drogas
 paraugs_8 = ["55403012521"]   # 8. paraugs | Meness aptieka
 
@@ -30,6 +30,7 @@ paraugs_8 = ["55403012521"]   # 8. paraugs | Meness aptieka
 #Sportland = "40003530961"      # 2. paraugs | Sportland
 maximaVeikals = "40003520643"   # 3. paraugs | Maxima veikals
 #Drogas = "40003271420"         # 3. paraugs | Drogas
+#IKEA = "50103951541"           # 2. paraugs | IKEA
 
 
 # Fukncija lai izveidotu jaunu pagaidu clipboard datu uzglabasanas failu talakai datu apstradei;
@@ -63,7 +64,9 @@ def get_data():
         veikals_PVN = re.findall(r"(40\d0\d\d\d\d\d\d\d)", data)[0] # Visi ar LV4000 kodiem | 01.06.2022 izveidots Pepco iznemums
         #veikals_PVN = re.findall(r"(4000\d\d\d\d\d\d\d)", data)[0] # Visi ar LV4000 kodiem
     except:
-        veikals_PVN = re.findall(r"LV(55\d\d\d\d\d\d\d\d\d)", data)[0] # ar LV55xxx kodiem, piem. Meness aptieka
+        #veikals_PVN = re.findall(r"LV(55\d\d\d\d\d\d\d\d\d)", data)[0] # ar LV55xxx kodiem, piem. Meness aptieka
+        veikals_PVN = re.search(r"(?<=LV)55\d\d\d\d\d\d\d\d\d|(?<=kods: )50\d\d\d\d\d\d\d\d\d", data)[0] # ar LV5xxxx kodiem, piem. Meness aptieka, IKEA | 04.08.2022 izveidots LV50 iznemums
+                      
     print(veikals_PVN)
 
 

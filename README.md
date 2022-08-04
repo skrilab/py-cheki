@@ -14,6 +14,7 @@ Uz doto brīdi risinājums balstās uz 'Google Lens' aplikāciju un primitīviem
  - Apranga
  - Sportland
  - Drogas
+ - IKEA
 
 ### Pilnvērtīga risinājuma lietošanai nepieciešams:
 - Dators ar:
