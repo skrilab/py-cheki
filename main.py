@@ -12,7 +12,7 @@ os.system('cls')
 class Clipboard:
     def _create_window(self) -> int:
         """
-        Create a window for listening to messages
+        Create a window for listening to messagesno
         :return: window hwnd
         """
         wc = win32gui.WNDCLASS()

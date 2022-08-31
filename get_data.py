@@ -87,7 +87,7 @@ def get_data():
 
         #ceka_summa = re.findall(r"apmaksai  (\d+,\d+)", data)[0]
         #ceka_summa = re.findall(r"kopā  (\d+,\d+)|apmaksai  (\d+,\d+)", data)[0] # labots 03.05.2022 v1
-        ceka_summa = re.search(r"(?<=kopā  )\d+,\d+|(?<=apmaksai  )\d+,\d+", data)[0] # labots 03.05.2022 v2
+        ceka_summa = re.search(r"(?<=kopā  )\d+,\d+|(?<=apmaksai  )\d+,\d+|(?<=apmaksai  )\d+.\d+", data)[0] # labots 03.05.2022 v2
         print(ceka_summa)    
         veikals_SUMMA = ceka_summa
 
@@ -119,7 +119,7 @@ def get_data():
         print(ceka_nr)
         veikals_CEKS = ceka_nr
 
-        ceka_summa = re.search(r"(?<=Samaksai EUR  )\d+,\d+|(?<=Samaksal EUR  )\d+,\d+", data)[0]
+        ceka_summa = re.search(r"(?<=Samaksai EUR  )\d+,\d+|(?<=Samaksai EUR  )\d+.\d+|(?<=Samaksal EUR  )\d+,\d+", data)[0]
         #ceka_summa = re.findall(r"Samaksai EUR  (\d+,\d+)", data)[0]
         print(ceka_summa)    
         veikals_SUMMA = ceka_summa
