@@ -77,7 +77,8 @@ def get_data():
 
         #kases_nr = re.findall(r"Nr.(\d.R\d+)", data)[0]
         #kases_nr = re.search(r"(?<=Nr.)\d.R\d+|(?<=Nr.)\d.HTM\d+", data)[0] #labots 01.06.2022 Pecpo kases nr.
-        kases_nr = re.search(r"(?<=Nr.)\d.R\d+|(?<=Nr. )\d.R\d+|(?<=Nr.)\d.HTM\d+", data)[0] #labots 02.08.2022 Virsi-DUS kases nr atstarpe.
+        #kases_nr = re.search(r"(?<=Nr.)\d.R\d+|(?<=Nr. )\d.R\d+|(?<=Nr.)\d.HTM\d+", data)[0] #labots 02.08.2022 Virsi-DUS kases nr atstarpe.
+        kases_nr = re.search(r"(?<=Nr.)\d.R\d+|(?<=Nr. )\d.R\d+|(?<=Nr.)\d.HTN\d+", data)[0] #labots 30.09.2022 Pecpo kases nr. HTM uz HTN
         print(kases_nr)
         veikals_KASE = kases_nr
     
